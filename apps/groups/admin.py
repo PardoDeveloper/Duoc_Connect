@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import StudyGroup, GroupMembership
+from .models import StudyGroup, GroupMembership, SharedFile
 
 
 @admin.register(StudyGroup)
@@ -13,3 +13,10 @@ class StudyGroupAdmin(admin.ModelAdmin):
 class GroupMembershipAdmin(admin.ModelAdmin):
     list_display = ('user', 'group', 'joined_at')
     search_fields = ('user__email', 'group__name')
+
+@admin.register(SharedFile)
+class SharedFileAdmin(admin.ModelAdmin):
+    list_display = ('file', 'group', 'uploaded_by', 'uploaded_at')
+    list_filter = ('group',)
+    search_fields = ('file', 'uploaded_by__email')
+    readonly_fields = ('uploaded_at',)

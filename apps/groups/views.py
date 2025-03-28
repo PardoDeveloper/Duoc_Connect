@@ -1,8 +1,9 @@
 from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import StudyGroup, GroupMembership
-from .serializers import StudyGroupSerializer, GroupMembershipSerializer
+from .models import StudyGroup, GroupMembership, SharedFile
+from .serializers import StudyGroupSerializer, GroupMembershipSerializer, SharedFileSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class StudyGroupListCreateView(generics.ListCreateAPIView):
@@ -38,3 +39,16 @@ class LeaveGroupView(APIView):
             return Response({'message': 'Saliste del grupo'}, status=status.HTTP_200_OK)
         except GroupMembership.DoesNotExist:
             return Response({'message': 'No perteneces a este grupo'}, status=status.HTTP_400_BAD_REQUEST)
+
+class SharedFileListCreateView(generics.ListCreateAPIView):
+    serializer_class = SharedFileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]  # para aceptar archivos
+
+    def get_queryset(self):
+        group_id = self.kwargs['group_id']
+        return SharedFile.objects.filter(group_id=group_id).order_by('-uploaded_at')
+
+    def perform_create(self, serializer):
+        group_id = self.kwargs['group_id']
+        serializer.save(uploaded_by=self.request.user, group_id=group_id)
