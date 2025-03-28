@@ -54,4 +54,13 @@ export class AuthService {
       return null;
     }
   }
+
+  register(data: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+  }) {
+    return this.http.post('/api/auth/register/', data);
+  }
 }
