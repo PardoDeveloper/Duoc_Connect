@@ -1,1 +1,43 @@
-<p>main-layout works!</p>
+<!-- Layout completo -->
+<div class="flex min-h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#002D72] text-white flex flex-col">
+      <div class="p-6 font-bold text-xl border-b border-white/10">Duoc Connect</div>
+      <nav class="flex-1 px-4 py-6 space-y-3">
+        <a routerLink="/" class="block px-4 py-2 rounded hover:bg-[#004FA3]">Inicio</a>
+        <a routerLink="/foro" class="block px-4 py-2 rounded hover:bg-[#004FA3]">Comunidad</a>
+        <a routerLink="/grupos" class="block px-4 py-2 rounded hover:bg-[#004FA3]">Grupos de Estudio</a>
+        <a routerLink="/trabajo" class="block px-4 py-2 rounded hover:bg-[#004FA3]">Bolsa de Trabajo</a>
+        <a routerLink="/denuncias" class="block px-4 py-2 rounded hover:bg-[#004FA3]">Seguridad</a>
+        <a routerLink="/perfil" class="block px-4 py-2 rounded hover:bg-[#004FA3]">Mi Perfil</a>
+      </nav>
+    </aside>
+  
+    <!-- Contenido derecho: Header + Main + Footer -->
+    <div class="flex-1 flex flex-col">
+      <!-- Header azul con sección -->
+      <header class="bg-[#002D72] text-white px-6 py-4 shadow-md flex justify-between items-center">
+        <h1 class="text-xl font-semibold">{{ currentSection }}</h1>
+        <button (click)="logout()"
+          class="bg-[#FDB813] text-[#002D72] px-4 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition">
+          Cerrar sesión
+        </button>
+      </header>
+  
+      <!-- Subheader usuario -->
+      <div class="bg-white shadow px-6 py-4 text-gray-700 text-sm border-b border-gray-200">
+        Bienvenido, <span class="font-medium">{{ userEmail }}</span>
+      </div>
+  
+      <!-- Contenido dinámico -->
+      <main class="flex-1 p-6">
+        <router-outlet></router-outlet>
+      </main>
+  
+      <!-- Footer -->
+      <footer class="bg-[#002D72] text-white text-center text-sm py-3">
+        © 2025 Duoc Connect. Todos los derechos reservados.
+      </footer>
+    </div>
+  </div>
+  

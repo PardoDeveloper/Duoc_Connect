@@ -1,11 +1,44 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
-    canActivate: [authGuard]
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/home/home.component').then((m) => m.HomeComponent)
+      },
+      {
+        path: 'foro',
+        loadComponent: () =>
+          import('./pages/community/community.component').then((m) => m.CommunityComponent)
+      },
+      {
+        path: 'grupos',
+        loadComponent: () =>
+          import('./pages/groups/groups.component').then((m) => m.GroupsComponent)
+      },
+      {
+        path: 'trabajo',
+        loadComponent: () =>
+          import('./pages/jobs/jobs.component').then((m) => m.JobsComponent)
+      },
+      {
+        path: 'denuncias',
+        loadComponent: () =>
+          import('./pages/reports/reports.component').then((m) => m.ReportsComponent)
+      },
+      {
+        path: 'perfil',
+        loadComponent: () =>
+          import('./pages/profile/profile.component').then((m) => m.ProfileComponent)
+      }
+    ]
   },
   {
     path: 'login',
