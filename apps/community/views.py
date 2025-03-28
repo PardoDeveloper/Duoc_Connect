@@ -1,6 +1,8 @@
-from rest_framework import generics, permissions
-from .models import Post, Comment
-from .serializers import PostSerializer, CommentSerializer
+from rest_framework import generics, permissions, status
+from .models import Post, Comment, Reaction
+from .serializers import PostSerializer, CommentSerializer, ReactionSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 class PostListCreateView(generics.ListCreateAPIView):
     queryset = Post.objects.all().order_by('-created_at')
@@ -37,3 +39,24 @@ class CommentListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         post_id = self.kwargs['post_id']
         serializer.save(author=self.request.user, post_id=post_id)
+
+class ReactionCreateUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, post_id):
+        user = request.user
+        reaction_type = request.data.get('reaction_type')
+
+        if not reaction_type:
+            return Response({'error': 'Debes especificar un tipo de reacción.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        reaction, created = Reaction.objects.update_or_create(
+            post_id=post_id,
+            user=user,
+            defaults={'reaction_type': reaction_type}
+        )
+
+        return Response({
+            'message': 'Reacción actualizada' if not created else 'Reacción agregada',
+            'reaction': ReactionSerializer(reaction).data
+        }, status=status.HTTP_200_OK)

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostListCreateView, PostRetrieveUpdateDestroyView, CommentListCreateView
+from .views import PostListCreateView, PostRetrieveUpdateDestroyView, CommentListCreateView, ReactionCreateUpdateView
 
 urlpatterns = [
     path('posts/', PostListCreateView.as_view(), name='post-list-create'),
@@ -7,4 +7,6 @@ urlpatterns = [
 
     # Comentarios de un post
     path('posts/<int:post_id>/comments/', CommentListCreateView.as_view(), name='post-comments'),
+
+    path('posts/<int:post_id>/react/', ReactionCreateUpdateView.as_view(), name='post-react'),
 ]
