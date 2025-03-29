@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PostServiceService } from '../../services/post-service.service';
+import { CommentService } from '../../services/comment.service';
 
 @Component({
   selector: 'app-community',
@@ -18,7 +19,15 @@ export class CommunityComponent implements OnInit, OnDestroy {
   error = '';
   pollingInterval: any;
 
-  constructor(private postService: PostServiceService) {}
+  // 👇 Estas tres son para manejar los comentarios por publicación
+  commentsMap: { [postId: number]: any[] } = {};
+  newCommentsMap: { [postId: number]: string } = {};
+  showCommentsMap: { [postId: number]: boolean } = {};
+
+  constructor(
+    private postService: PostServiceService,
+    private commentService: CommentService
+  ) {}
 
   ngOnInit(): void {
     this.loadPosts();
@@ -72,4 +81,39 @@ export class CommunityComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  toggleComments(postId: number): void {
+    this.showCommentsMap[postId] = !this.showCommentsMap[postId];
+    if (this.showCommentsMap[postId] && !this.commentsMap[postId]) {
+      this.loadComments(postId);
+    }
+  }
+  
+  loadComments(postId: number): void {
+    this.commentService.getComments(postId).subscribe({
+      next: (comments) => {
+        console.log('Comentarios para post ' + postId, comments); // 👀 debug
+        this.commentsMap[postId] = comments.results ?? comments;
+      },
+      error: () => {
+        this.commentsMap[postId] = [];
+      }
+    });
+  }
+  
+  addComment(postId: number): void {
+    const content = this.newCommentsMap[postId];
+    if (!content?.trim()) return;
+  
+    this.commentService.addComment(postId, content).subscribe({
+      next: () => {
+        this.newCommentsMap[postId] = '';
+        this.showCommentsMap[postId] = true; // 👈 abre comentarios si estaban ocultos
+        this.loadComments(postId);
+      },
+      error: () => alert('No se pudo agregar el comentario.')
+    });
+  }
+  
+  
 }
