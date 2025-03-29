@@ -9,4 +9,5 @@ urlpatterns = [
     path('posts/<int:post_id>/comments/', CommentListCreateView.as_view(), name='post-comments'),
 
     path('posts/<int:post_id>/react/', ReactionCreateUpdateView.as_view(), name='post-react'),
+
 ]

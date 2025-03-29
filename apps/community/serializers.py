@@ -6,8 +6,16 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'content', 'author_email', 'created_at', 'updated_at', 'is_public']
-
+        fields = [
+            'id',
+            'author_email',
+            'title',
+            'content',
+            'created_at',
+            'updated_at',
+            'is_public',
+        ]
+        read_only_fields = ['author_email', 'created_at', 'updated_at']
 
 class CommentSerializer(serializers.ModelSerializer):
     author_email = serializers.EmailField(source='author.email', read_only=True)

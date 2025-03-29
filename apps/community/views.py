@@ -5,9 +5,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 class PostListCreateView(generics.ListCreateAPIView):
-    queryset = Post.objects.all().order_by('-created_at')
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Post.objects.filter(is_public=True).order_by('-created_at')
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
