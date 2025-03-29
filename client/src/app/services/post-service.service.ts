@@ -9,8 +9,9 @@ export class PostServiceService {
 
   constructor(private http: HttpClient) {}
 
-  getPosts() {
-    return this.http.get<any[]>(this.apiUrl);
+  getPosts(url: string = '') {
+    const endpoint = url || this.apiUrl;
+    return this.http.get<any>(endpoint);
   }
 
   createPost(data: { title: string; content: string; is_public: boolean }) {

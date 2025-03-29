@@ -1,34 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PostServiceService } from '../../services/post-service.service';
 import { CommonModule } from '@angular/common';
+import { PostServiceService } from '../../services/post-service.service';
 
 @Component({
   selector: 'app-community',
-  imports: [FormsModule, CommonModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './community.component.html',
-  styleUrl: './community.component.css'
+  styleUrls: ['./community.component.css']
 })
-export class CommunityComponent implements OnInit {
-
+export class CommunityComponent implements OnInit, OnDestroy {
   posts: any[] = [];
   newPost = { title: '', content: '' };
+  nextPage: string | null = null;
+  previousPage: string | null = null;
   error = '';
-  constructor(private postService: PostServiceService){}
-  
+  pollingInterval: any;
+
+  constructor(private postService: PostServiceService) {}
+
   ngOnInit(): void {
     this.loadPosts();
+    this.pollingInterval = setInterval(() => this.loadPosts(), 15000);
   }
 
-  loadPosts() {
-    this.postService.getPosts().subscribe({
-      next: (res) => (this.posts = res),
-      error: () => (this.error = 'Error al cargar publicaciones.')
+  ngOnDestroy(): void {
+    clearInterval(this.pollingInterval);
+  }
+
+  loadPosts(url: string = ''): void {
+    this.postService.getPosts(url).subscribe({
+      next: (res) => {
+        this.posts = res.results ?? res;
+        this.nextPage = res.next || null;
+        this.previousPage = res.previous || null;
+      },
+      error: () => {
+        this.error = 'Error al cargar publicaciones.';
+      }
     });
   }
 
-  createPost() {
+  next(): void {
+    if (this.nextPage) {
+      this.loadPosts(this.nextPage);
+    }
+  }
+
+  previous(): void {
+    if (this.previousPage) {
+      this.loadPosts(this.previousPage);
+    }
+  }
+
+  createPost(): void {
     if (!this.newPost.title.trim() || !this.newPost.content.trim()) return;
 
     const postData = {
@@ -39,9 +65,11 @@ export class CommunityComponent implements OnInit {
     this.postService.createPost(postData).subscribe({
       next: () => {
         this.newPost = { title: '', content: '' };
-        this.loadPosts(); // Refresca la lista
+        this.loadPosts(); // refresca después de publicar
       },
-      error: () => (this.error = 'No se pudo publicar.')
+      error: () => {
+        this.error = 'No se pudo publicar.';
+      }
     });
   }
 }
