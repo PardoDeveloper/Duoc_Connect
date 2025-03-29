@@ -1,1 +1,30 @@
-<p>community works!</p>
+<div class="max-w-3xl mx-auto mt-6 space-y-6">
+    <h2 class="text-2xl font-bold text-[#002D72]">Comunidad Estudiantil</h2>
+  
+    <!-- Crear publicación -->
+    <div class="bg-white p-4 rounded-lg shadow border">
+      <input [(ngModel)]="newPost.title" placeholder="Título"
+        class="w-full mb-2 p-2 border rounded focus:ring-2 focus:ring-[#004FA3] focus:outline-none" />
+      <textarea [(ngModel)]="newPost.content" rows="3" placeholder="Contenido"
+        class="w-full p-2 border rounded resize-none focus:ring-2 focus:ring-[#004FA3] focus:outline-none"></textarea>
+      <div class="mt-2 text-right">
+        <button (click)="createPost()"
+          class="bg-[#002D72] text-white px-4 py-2 rounded hover:bg-[#004FA3] transition">
+          Publicar
+        </button>
+      </div>
+    </div>
+  
+    <!-- Lista de publicaciones -->
+    <div *ngFor="let post of posts" class="bg-white p-4 rounded-lg shadow border">
+      <div class="flex justify-between items-center mb-1">
+        <span class="font-semibold text-[#004FA3]">{{ post.author_email }}</span>
+        <span class="text-sm text-gray-500">{{ post.created_at | date:'short' }}</span>
+      </div>
+      <h3 class="text-lg font-bold text-gray-800">{{ post.title }}</h3>
+      <p class="text-gray-700 mt-1">{{ post.content }}</p>
+    </div>
+  
+    <p *ngIf="error" class="text-red-600 text-sm">{{ error }}</p>
+  </div>
+  
