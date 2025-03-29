@@ -17,4 +17,8 @@ export class PostServiceService {
   createPost(data: { title: string; content: string; is_public: boolean }) {
     return this.http.post(this.apiUrl, data);
   }
+
+  deletePost(postId: number) {
+    return this.http.delete(`/api/community/posts/${postId}/`);
+  }
 }

@@ -6,8 +6,8 @@ urlpatterns = [
     path('posts/<int:pk>/', PostRetrieveUpdateDestroyView.as_view(), name='post-detail'),
 
     # Comentarios de un post
-    path('posts/<int:post_id>/comments/', CommentListCreateView.as_view(), name='post-comments'),
+    path('posts/<int:post_id>/comments/', CommentListCreateView.as_view(), name='comment-list-create'),
 
     path('posts/<int:post_id>/react/', ReactionCreateUpdateView.as_view(), name='post-react'),
-
+    
 ]

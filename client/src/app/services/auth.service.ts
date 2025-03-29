@@ -63,4 +63,12 @@ export class AuthService {
   }) {
     return this.http.post('/api/auth/register/', data);
   }
+
+  getUserEmail(): string {
+    const token = localStorage.getItem('access');
+    if (!token) return '';
+    const decoded: any = jwtDecode(token);
+    return decoded.email || '';
+  }
+  
 }
