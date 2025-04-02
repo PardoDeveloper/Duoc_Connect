@@ -1,0 +1,30 @@
+<div class="max-w-2xl mx-auto p-6 bg-white shadow rounded space-y-6">
+    <h2 class="text-2xl font-bold text-[#002D72]">Seguridad de la Cuenta</h2>
+  
+    <!-- Cambiar contraseña -->
+    <div>
+      <h3 class="text-lg font-semibold">Cambiar contraseña</h3>
+      <input [(ngModel)]="currentPassword" type="password" placeholder="Contraseña actual"
+             class="w-full p-2 border rounded mt-2 mb-2" />
+      <input [(ngModel)]="newPassword" type="password" placeholder="Nueva contraseña"
+             class="w-full p-2 border rounded mb-2" />
+      <input [(ngModel)]="confirmPassword" type="password" placeholder="Confirmar nueva contraseña"
+             class="w-full p-2 border rounded mb-4" />
+      <button (click)="changePassword()" class="bg-[#002D72] text-white px-4 py-2 rounded hover:bg-[#004FA3] transition">
+        Actualizar contraseña
+      </button>
+      <p *ngIf="message" class="text-sm text-green-600 mt-2">{{ message }}</p>
+    </div>
+  
+    <!-- Registros de seguridad -->
+    <div class="pt-6 border-t mt-6">
+      <h3 class="text-lg font-semibold">Actividad reciente</h3>
+      <ul class="mt-2 space-y-1 text-sm text-gray-700">
+        <li *ngFor="let log of logs">
+          {{ log.date }} — {{ log.event }}
+        </li>
+      </ul>
+      <p *ngIf="logs.length === 0" class="text-gray-500">No hay actividad registrada.</p>
+    </div>
+  </div>
+  

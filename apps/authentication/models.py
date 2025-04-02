@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 from django.utils import timezone
-
+from django.conf import settings
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None, **extra_fields):
@@ -30,6 +30,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     # Extras
     profile_picture = models.ImageField(upload_to='profiles/', null=True, blank=True)
     resume = models.FileField(upload_to='resumes/', null=True, blank=True)
+    comuna = models.CharField(max_length=100, blank=True, null=True) 
 
     objects = CustomUserManager()
 
@@ -38,3 +39,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+class SecurityLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    action = models.CharField(max_length=255)  # Ej: 'Cambio de contraseña', 'Login', etc.
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.email} - {self.action} - {self.timestamp.strftime("%Y-%m-%d %H:%M")}'

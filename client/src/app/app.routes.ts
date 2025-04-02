@@ -29,9 +29,9 @@ export const routes: Routes = [
           import('./pages/jobs/jobs.component').then((m) => m.JobsComponent)
       },
       {
-        path: 'denuncias',
+        path: 'reportes',
         loadComponent: () =>
-          import('./pages/reports/reports.component').then((m) => m.ReportsComponent)
+          import('./pages/reports/reports.component').then((m) => m.ReportesComponent)
       },
       {
         path: 'perfil',

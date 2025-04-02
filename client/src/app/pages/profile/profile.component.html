@@ -1,1 +1,53 @@
-<p>profile works!</p>
+<div class="max-w-xl mx-auto p-6 bg-white shadow rounded space-y-6">
+    <h2 class="text-2xl font-bold text-[#002D72]">Mi Perfil</h2>
+
+    <!-- Foto de perfil -->
+    <div class="text-center">
+        <img [src]="user.photoURL || defaultAvatar" alt="Foto de perfil"
+            class="mx-auto h-24 w-24 rounded-full object-cover border" />
+
+        <!-- Selector -->
+        <label class="cursor-pointer text-sm text-[#004FA3] hover:underline inline-block mt-2 mr-2">
+            Cambiar foto
+            <input type="file" (change)="onPhotoSelected($event)" accept="image/*" hidden />
+        </label>
+
+        <!-- Botón subir -->
+        <button (click)="uploadPhoto()"
+            class="mt-2 ml-2 bg-[#FDB813] text-[#002D72] px-4 py-1 rounded hover:bg-yellow-400">
+            Subir Foto
+        </button>
+    </div>
+
+
+    <!-- Info del usuario -->
+    <div class="space-y-2">
+        <div><strong>Nombre:</strong> {{ user.name }}</div>
+        <div><strong>Correo:</strong> {{ user.email }}</div>
+        <div><strong>Comuna:</strong> {{ user.comuna || 'No especificada' }}</div>
+    </div>
+
+    <!-- Cambiar contraseña -->
+    <div class="pt-6 border-t mt-6">
+        <h3 class="text-lg font-semibold mb-2">Cambiar contraseña</h3>
+
+        <input [(ngModel)]="currentPassword" type="password" placeholder="Contraseña actual"
+            class="w-full p-2 border rounded mb-2 focus:ring-[#004FA3] focus:ring-1 focus:outline-none" />
+
+        <input [(ngModel)]="newPassword" type="password" placeholder="Nueva contraseña"
+            class="w-full p-2 border rounded mb-2 focus:ring-[#004FA3] focus:ring-1 focus:outline-none" />
+
+        <input [(ngModel)]="confirmPassword" type="password" placeholder="Confirmar nueva contraseña"
+            class="w-full p-2 border rounded mb-2 focus:ring-[#004FA3] focus:ring-1 focus:outline-none" />
+
+        <p *ngIf="passwordMismatch" class="text-sm text-red-600 mb-2">
+            Las contraseñas no coinciden.
+        </p>
+
+        <button (click)="changePassword()"
+            class="bg-[#002D72] text-white px-4 py-2 rounded hover:bg-[#004FA3] transition">
+            Actualizar contraseña
+        </button>
+
+        <p *ngIf="message" class="text-sm text-green-600 mt-2">{{ message }}</p>
+    </div>

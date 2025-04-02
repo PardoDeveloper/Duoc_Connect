@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
+import { Observable } from 'rxjs';
 
 
 export interface JwtPayload {
@@ -71,4 +72,23 @@ export class AuthService {
     return decoded.email || '';
   }
   
+  getUserProfile(): Observable<any> {
+    return this.http.get(`/api/auth/profile/`);  // ✅ Correcto
+  }
+  
+
+  updateProfilePhoto(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('profile_picture', file);  // <-- usa el nombre correcto aquí
+    return this.http.put(`/api/auth/profile/photo/`, formData);
+  }
+  
+
+  changePassword(currentPassword: string, newPassword: string): Observable<any> {
+    return this.http.put(`/api/auth/profile/password/`, {
+      current_password: currentPassword,
+      new_password: newPassword
+    });
+  }
+
 }

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, SecurityLog
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -22,3 +22,12 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+
+class ProfilePhotoSerializer(serializers.Serializer):
+    profile_picture = serializers.ImageField()
+
+class SecurityLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SecurityLog
+        fields = ['user', 'action', 'timestamp']

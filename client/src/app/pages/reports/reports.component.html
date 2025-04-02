@@ -1,1 +1,48 @@
-<p>reports works!</p>
+<div class="max-w-xl mx-auto p-6 bg-white shadow rounded space-y-6">
+  <h2 class="text-2xl font-bold text-[#002D72]">Enviar Reporte</h2>
+
+  <!-- Tipo de Reporte -->
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Tipo de Reporte</label>
+    <select [(ngModel)]="form.tipo" class="w-full border rounded p-2 mt-1">
+      <option value="" disabled selected>Selecciona una opción</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo.value">{{ tipo.label }}</option>
+    </select>
+  </div>
+
+  <!-- Descripción -->
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Descripción</label>
+    <textarea [(ngModel)]="form.descripcion" rows="4" class="w-full border rounded p-2 mt-1"
+              placeholder="Describe lo ocurrido..."></textarea>
+  </div>
+
+  <!-- Laboratorio -->
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Laboratorio (opcional)</label>
+    <input [(ngModel)]="form.laboratorio" type="text" class="w-full border rounded p-2 mt-1" />
+  </div>
+
+  <!-- Adjuntar evidencia -->
+  <div>
+    <label for="fileUpload" class="block text-sm font-medium text-gray-700">Adjuntar evidencia</label>
+    <label
+      for="fileUpload"
+      class="mt-2 inline-block px-4 py-2 bg-[#FDB813] text-[#002D72] rounded cursor-pointer hover:bg-yellow-400 transition"
+    >
+      📎 Seleccionar archivo
+    </label>
+    <input id="fileUpload" type="file" (change)="onFileSelected($event)" hidden />
+    <p class="text-sm text-gray-600 mt-1" *ngIf="selectedFile">
+      Archivo seleccionado: {{ selectedFile.name }}
+    </p>
+  </div>
+
+  <!-- Botón enviar -->
+  <button (click)="enviarReporte()" class="bg-[#002D72] text-white px-4 py-2 rounded hover:bg-[#004FA3] transition w-full">
+    Enviar Reporte
+  </button>
+
+  <!-- Mensaje -->
+  <p *ngIf="mensaje" class="mt-4 text-sm text-green-600">{{ mensaje }}</p>
+</div>
